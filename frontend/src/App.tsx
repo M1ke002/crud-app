@@ -1,17 +1,16 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import { Button } from "@/components/ui/button";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div>
-      <Button>Click me</Button>
-      <div className="bg-rose-200 p-3">dsds</div>
-    </div>
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
