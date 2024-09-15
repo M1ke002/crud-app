@@ -29,7 +29,7 @@ export const createBlog = async (req: Request, res: Response) => {
   const { title, content } = req.body;
 
   if (!title) {
-    return res.status(404).json({ error: "Missing title" });
+    return res.status(400).json({ error: "Missing title" });
   }
 
   try {
@@ -45,7 +45,7 @@ export const editBlog = async (req: Request, res: Response) => {
   const { title, content } = req.body;
 
   if (!title) {
-    return res.status(404).json({ error: "Missing data" });
+    return res.status(400).json({ error: "Missing data" });
   }
 
   try {
