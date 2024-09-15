@@ -1,46 +1,58 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { DataTable } from "./DataTable";
 import { columns } from "./columns";
-import Student from "@/types/Student";
-
-const data: Student[] = [
-  {
-    id: 1,
-    name: "name",
-    dob: "14/01/2001",
-    email: "abc@email.com",
-  },
-  {
-    id: 2,
-    name: "name2",
-    dob: "14/01/2002",
-    email: "abc@email.com",
-  },
-  {
-    id: 3,
-    name: "name3",
-    dob: "14/02/2001",
-    email: "abc@email.com",
-  },
-];
+import CreateBlogModal from "./modals/CreateBlogModal";
+import axiosInstance from "@/lib/axiosConfig";
+import Blog from "@/types/Blog";
 
 const HomePage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  //fetch blogs data
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axiosInstance.get("/blogs");
+      console.log(res.data);
+      setBlogs(res.data);
+    };
+    fetchData();
+  }, []);
+
+  const createBlog = async (title: string, content: string) => {
+    try {
+      const res = await axiosInstance.post("/blogs", {
+        title,
+        content,
+      });
+      setBlogs((prev) => [...prev, res.data]);
+    } catch (error) {
+      console.log("error creating blog", error);
+    }
+  };
+
+  const deleteBlog = async (blogId: number) => {
+    try {
+      await axiosInstance.delete(`/blogs/${blogId}`);
+      setBlogs((prev) => prev.filter((blog) => blog.id !== blogId));
+    } catch (error) {
+      console.log("error deleting blog", error);
+    }
+  };
+
   return (
     <>
-      {/* title */}
-      <p className="flex justify-center py-3 px-3 font-bold text-3xl">
-        Student CRUD App
-      </p>
-
-      <hr />
-
-      {/* table */}
-      <div className="max-w-[1450px] mx-auto mt-6 space-y-3">
-        <Button>Add student</Button>
-
-        <DataTable columns={columns} data={data} />
+      <div className="space-y-5">
+        <Button onClick={() => setIsOpen(true)}>Add blog</Button>
+        <DataTable columns={columns} data={blogs} deleteBlog={deleteBlog} />
       </div>
+
+      <CreateBlogModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        createBlog={createBlog}
+      />
     </>
   );
 };
