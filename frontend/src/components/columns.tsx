@@ -1,4 +1,4 @@
-import Blog from "@/types/Blog";
+import IBlog from "@/types/IBlog";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-export const columns: ColumnDef<Blog>[] = [
+export const columns: ColumnDef<IBlog>[] = [
   {
     accessorKey: "id",
     header: "ID",

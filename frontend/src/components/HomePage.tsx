@@ -6,11 +6,11 @@ import { columns } from "./columns";
 import CreateBlogModal from "./modals/CreateBlogModal";
 import axiosInstance from "@/lib/axiosConfig";
 import axios from "axios";
-import Blog from "@/types/Blog";
+import IBlog from "@/types/IBlog";
 
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<IBlog[]>([]);
 
   //fetch blogs data
   useEffect(() => {

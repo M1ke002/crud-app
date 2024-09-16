@@ -1,35 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "@/lib/axiosConfig";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
-
-import Blog from "@/types/Blog";
+import axios from "axios";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import axios from "axios";
+
+import { Button } from "./ui/button";
 import { toast } from "sonner";
+import Blog from "./Blog";
+import EditBlogForm from "./EditBlogForm";
+import IBlog from "@/types/IBlog";
 
 const formSchema = z.object({
-  title: z.string(),
+  title: z.string().min(1, { message: "Title is required" }),
   content: z.string(),
 });
 
 const BlogPage = () => {
   const { id: blogId } = useParams<{ id: string }>();
-  const [blog, setBlog] = useState<Blog>();
+  const [blog, setBlog] = useState<IBlog>();
   const [isEditable, setIsEditable] = useState(false);
   const navigate = useNavigate();
 
@@ -72,11 +63,11 @@ const BlogPage = () => {
   }, [blog, form]);
 
   //call api to update blog data
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const editBlog = async (title: string, content: string) => {
     try {
       const res = await axiosInstance.put(`/blogs/${blogId}`, {
-        title: values.title,
-        content: values.content,
+        title,
+        content,
       });
       setBlog(res.data);
     } catch (error: unknown) {
@@ -95,85 +86,30 @@ const BlogPage = () => {
     }
   };
 
-  const handleCancel = () => {
-    if (blog) {
-      form.setValue("title", blog.title);
-      form.setValue("content", blog.content);
-    }
-    setIsEditable(false);
-  };
-
-  const toggleEditMode = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setIsEditable(true);
-  };
+  if (!blog) {
+    return <p className="text-center">Loading...</p>;
+  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <div className="space-y-4">
+      {isEditable ? (
+        <EditBlogForm
+          blog={blog}
+          setIsEditable={setIsEditable}
+          editBlog={editBlog}
+        />
+      ) : (
         <div className="space-y-5">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-semibold">Title</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Title"
-                    {...field}
-                    readOnly={!isEditable}
-                    className="bg-white"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-semibold">Content</FormLabel>
-                <FormControl>
-                  <Textarea
-                    rows={10}
-                    placeholder="Enter blog content"
-                    {...field}
-                    className="bg-white"
-                    readOnly={!isEditable}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex justify-between">
-          <Button type="button" onClick={() => navigate("/")}>
-            Back
-          </Button>
-          <div>
-            {isEditable ? (
-              <>
-                <Button type="submit" className="mr-2">
-                  Save
-                </Button>
-                <Button variant="secondary" onClick={handleCancel}>
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <Button type="button" onClick={toggleEditMode}>
-                Edit
-              </Button>
-            )}
+          <Blog blog={blog} />
+          <div className="flex justify-between">
+            <Button type="button" onClick={() => navigate("/")}>
+              Back
+            </Button>
+            <Button onClick={() => setIsEditable(true)}>Edit</Button>
           </div>
         </div>
-      </form>
-    </Form>
+      )}
+    </div>
   );
 };
 

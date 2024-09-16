@@ -12,7 +12,7 @@ class Blog extends Model {
   public title!: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
   })
   public content!: string;
 }

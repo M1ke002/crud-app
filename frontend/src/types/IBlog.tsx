@@ -1,4 +1,4 @@
-interface Blog {
+interface IBlog {
   id: number;
   title: string;
   content: string;
@@ -6,4 +6,4 @@ interface Blog {
   updatedAt: Date;
 }
 
-export default Blog;
+export default IBlog;
