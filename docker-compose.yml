@@ -3,12 +3,10 @@ services:
     image: mysql
     restart: always
     ports:
-      - '3307:3306'
+      - '3307:3306' #maps docker port to local port
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=student_crud
-      - MYSQL_USER=testuser
-      - MYSQL_PASSWORD=testuser123
+      - MYSQL_ROOT_PASSWORD=pass123
+      - MYSQL_DATABASE=blog_crud
     volumes:
       - my-db:/var/lib/mysql
 
@@ -23,6 +21,9 @@ services:
       - PORT=3000
       - DB_PORT=3306
       - DB_HOST=mysql
+      - DB_NAME=blog_crud
+      - DB_USER=root
+      - DB_PASSWORD=pass123
     depends_on:
       - mysql
     volumes:
@@ -31,4 +32,4 @@ services:
 volumes:
   my-db:
 
-#docker compose up --build
+#docker compose up
