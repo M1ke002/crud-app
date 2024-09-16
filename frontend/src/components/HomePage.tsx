@@ -4,6 +4,7 @@ import { DataTable } from "./DataTable";
 import { columns } from "./columns";
 import CreateBlogModal from "./modals/CreateBlogModal";
 import axiosInstance from "@/lib/axiosConfig";
+import axios from "axios";
 import Blog from "@/types/Blog";
 
 const HomePage = () => {
@@ -13,9 +14,16 @@ const HomePage = () => {
   //fetch blogs data
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axiosInstance.get("/blogs");
-      console.log(res.data);
-      setBlogs(res.data);
+      try {
+        const res = await axiosInstance.get("/blogs");
+        setBlogs(res.data);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.log("error fetching blogs", error.response?.data);
+        } else {
+          console.log("error fetching blogs", error);
+        }
+      }
     };
     fetchData();
   }, []);
@@ -27,8 +35,12 @@ const HomePage = () => {
         content,
       });
       setBlogs((prev) => [...prev, res.data]);
-    } catch (error) {
-      console.log("error creating blog", error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.log("error creating blog", error.response?.data);
+      } else {
+        console.log("error creating blog", error);
+      }
     }
   };
 
@@ -36,8 +48,12 @@ const HomePage = () => {
     try {
       await axiosInstance.delete(`/blogs/${blogId}`);
       setBlogs((prev) => prev.filter((blog) => blog.id !== blogId));
-    } catch (error) {
-      console.log("error deleting blog", error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.log("error deleting blog", error.response?.data);
+      } else {
+        console.log("error deleting blog", error);
+      }
     }
   };
 

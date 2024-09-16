@@ -19,6 +19,7 @@ import Blog from "@/types/Blog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import axios from "axios";
 
 const formSchema = z.object({
   title: z.string(),
@@ -45,8 +46,12 @@ const BlogPage = () => {
       try {
         const res = await axiosInstance.get(`/blogs/${blogId}`);
         setBlog(res.data);
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.log("error fetching blog", error.response?.data);
+        } else {
+          console.log("error fetching blog", error);
+        }
       }
     };
     fetchBlog();
@@ -68,8 +73,12 @@ const BlogPage = () => {
         content: values.content,
       });
       setBlog(res.data);
-    } catch (error) {
-      console.log("error editing blog", error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.log("error editing blog", error.response?.data);
+      } else {
+        console.log("error editing blog", error);
+      }
     } finally {
       setIsEditable(false);
     }
