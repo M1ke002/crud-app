@@ -18,6 +18,7 @@ services:
     ports:
       - '3000:3000'
     environment:
+      - WAIT_HOSTS=mysql:3306
       - PORT=3000
       - DB_PORT=3306
       - DB_HOST=mysql
