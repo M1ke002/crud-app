@@ -58,7 +58,7 @@ const CreateBlogModal = (props: CreateBlogModalProps) => {
       <DialogContent className="bg-white text-black p-0 overflow-hidden rounded-none">
         <DialogHeader className="pt-6 px-6">
           <DialogTitle className="text-2xl text-center font-bold capitalize">
-            Add student
+            Add Blog
           </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
