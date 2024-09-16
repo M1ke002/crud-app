@@ -1,4 +1,4 @@
-# Blog crud-app
+# Blog CRUD app
 
 ## Tech stack
 
@@ -29,14 +29,15 @@ npm run dev
 ### 3. Running the Backend and database
 Navigate to the root folder and ensure Docker is running on your machine. To start the backend server and MySQL containers, run:
 ```bash
-# start containers
 docker-compose up
 # use -d flag to run in background
-
-# stop containers
-docker-compose down
 ```
 This will start the backend API on http://localhost:3000 and the database on port 3307
+
+To stop the containers:
+```bash
+docker-compose down
+```
 
 **NOTE**: On the first time running the containers, there might be an ```ECONNREFUSED``` error when the backend tries to connect to the MySQL database. This is because the MySQL server may not have fully initialized by the time the backend attempts to connect. If you see this error, restart the backend container and everything should work as expected:
 ```bash
