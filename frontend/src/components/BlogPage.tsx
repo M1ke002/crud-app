@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string(),
@@ -47,11 +48,16 @@ const BlogPage = () => {
         const res = await axiosInstance.get(`/blogs/${blogId}`);
         setBlog(res.data);
       } catch (error: unknown) {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error || "Something went wrong"
+          : "Something went wrong";
+
         if (axios.isAxiosError(error)) {
           console.log("error fetching blog", error.response?.data);
         } else {
           console.log("error fetching blog", error);
         }
+        toast.error(errorMessage);
       }
     };
     fetchBlog();
@@ -74,11 +80,16 @@ const BlogPage = () => {
       });
       setBlog(res.data);
     } catch (error: unknown) {
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.error || "Something went wrong"
+        : "Something went wrong";
+
       if (axios.isAxiosError(error)) {
         console.log("error editing blog", error.response?.data);
       } else {
         console.log("error editing blog", error);
       }
+      toast.error(errorMessage);
     } finally {
       setIsEditable(false);
     }

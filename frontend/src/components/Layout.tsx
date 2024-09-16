@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { Toaster } from "./ui/sonner";
 
 const Layout = () => {
   return (
@@ -13,6 +14,15 @@ const Layout = () => {
       <div className="max-w-[1400px] mx-auto">
         <Outlet />
       </div>
+
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: "bg-red-400 text-white",
+          },
+        }}
+        position="top-right"
+      />
     </>
   );
 };

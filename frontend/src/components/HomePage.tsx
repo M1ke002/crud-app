@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { DataTable } from "./DataTable";
 import { columns } from "./columns";
@@ -18,11 +19,16 @@ const HomePage = () => {
         const res = await axiosInstance.get("/blogs");
         setBlogs(res.data);
       } catch (error: unknown) {
+        const errorMessage = axios.isAxiosError(error)
+          ? error.response?.data?.error || "Something went wrong"
+          : "Something went wrong";
+
         if (axios.isAxiosError(error)) {
           console.log("error fetching blogs", error.response?.data);
         } else {
           console.log("error fetching blogs", error);
         }
+        toast.error(errorMessage);
       }
     };
     fetchData();
@@ -36,11 +42,16 @@ const HomePage = () => {
       });
       setBlogs((prev) => [...prev, res.data]);
     } catch (error: unknown) {
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.error || "Something went wrong"
+        : "Something went wrong";
+
       if (axios.isAxiosError(error)) {
         console.log("error creating blog", error.response?.data);
       } else {
         console.log("error creating blog", error);
       }
+      toast.error(errorMessage);
     }
   };
 
@@ -49,11 +60,16 @@ const HomePage = () => {
       await axiosInstance.delete(`/blogs/${blogId}`);
       setBlogs((prev) => prev.filter((blog) => blog.id !== blogId));
     } catch (error: unknown) {
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.error || "Something went wrong"
+        : "Something went wrong";
+
       if (axios.isAxiosError(error)) {
         console.log("error deleting blog", error.response?.data);
       } else {
         console.log("error deleting blog", error);
       }
+      toast.error(errorMessage);
     }
   };
 
