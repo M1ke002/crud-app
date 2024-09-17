@@ -5,7 +5,17 @@
 - Frontend: React, TypeScript, TailwindCSS, Shadcn-UI
 - Backend: Express, TypeScript, Sequelize ORM
 - Database: MySQL
-- Others: Docker, Jest (for testing)
+- Others: Docker, Jest
+
+## API Endpoints
+
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `/api/blogs`                             | Retrieve all blogs.                      |
+| `GET`    | `/api/blogs/1`                           | Retrieve blog #1.                        |
+| `POST`   | `/api/blogs`                             | Create a new blog.                       |
+| `PUT`    | `/api/blogs/1`                           | Update data in blog #1.                  |
+| `DELETE` | `/api/blogs/1`                           | Delete blog #1.                          |
 
 ## Installation and Setup
 
@@ -26,7 +36,7 @@ To start the development server (on http://localhost:5173)
 ```
 npm run dev
 ```
-### 3. Running the Backend and database
+### 3. Running the Backend
 Navigate to the root folder and ensure Docker is running on your machine. To start the backend server and MySQL containers, run:
 ```bash
 docker-compose up
@@ -45,7 +55,7 @@ docker-compose down
 docker-compose restart api
 ```
 ### 4. Running Tests
-To run the backend tests:
+To run the backend unit tests:
 ```
 cd backend
 npm run test
